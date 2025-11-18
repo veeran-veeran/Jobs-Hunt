@@ -28,15 +28,19 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+// Session setup
 app.use(session({
-    secret: process.env.SESSION_SECRET || "yourSecretKey",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: process.env.ATLAS_MONGO_URL }),
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGO_URL, // <-- THIS IS REQUIRED
+        collectionName: 'sessions',
+    }),
     cookie: {
-        secure: true,       // HTTPS required in live
+        secure: true,       // live HTTPS ke liye
         httpOnly: true,
-        sameSite: "none",   // cross-site request ke liye
+        sameSite: 'none',   // cross-site ke liye
         maxAge: 1000 * 60 * 60 * 24, // 1 day
     }
 }));
