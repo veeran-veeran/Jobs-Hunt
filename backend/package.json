@@ -1,11 +1,5 @@
 {
   
-    "engines": {
-  
-      
-    "node": "v23.1.0"
-  
-    },
   
     "name": "backend",
   
