@@ -1,5 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
+import session from "express-session";
+import MongoStore from "connect-mongo";
 import cors from "cors";
 import connectDB from "./utils/db.js";
 import userRoute  from "./routes/user.route.js";
@@ -26,6 +28,18 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.use(session({
+    secret: process.env.SESSION_SECRET || "yourSecretKey",
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.ATLAS_MONGO_URL }),
+    cookie: {
+        secure: true,       // HTTPS required in live
+        httpOnly: true,
+        sameSite: "none",   // cross-site request ke liye
+        maxAge: 1000 * 60 * 60 * 24, // 1 day
+    }
+}));
 
 
 const PORT=process.env.PORT || 3000;
